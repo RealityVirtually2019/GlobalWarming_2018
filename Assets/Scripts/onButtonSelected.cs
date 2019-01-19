@@ -27,12 +27,14 @@ public class onButtonSelected : MonoBehaviour {
             if (isButtonOn)
             {
                 GetComponent<Renderer>().material.color = onColor;
-                toHide.SetActive(true);
+                if (toHide != null)
+                    toHide.SetActive(true);
             }
             else
             {
                 GetComponent<Renderer>().material.color = offColor;
-                toHide.SetActive(false);
+                if (toHide != null)
+                    toHide.SetActive(false);
             }
         }
     }
