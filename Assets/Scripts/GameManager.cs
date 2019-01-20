@@ -6,9 +6,11 @@ using UnityEngine.EventSystems;
 
 
 public class GameManager : MonoBehaviour {
+    public AudioClip touchEarth;
     public AudioClip[] adClips;
     public AudioClip endClip;
     public AudioSource adSource;
+    public Transform flood;
     public GameObject[] iceCaps;
     public float time = 20f;
     public float offset;
@@ -58,10 +60,11 @@ public class GameManager : MonoBehaviour {
         if (screenFade.isFadingDone && !played)
         {
             played = true;
+            introAudio.clip = touchEarth;
             introAudio.Play();
         }
         currTime += Time.deltaTime;
-        if (currTime >= interval)
+        if (currTime >= interval && screenFade.isFadingDone)
         {
             currTime = 0;
             if (index < iceCaps.Length)
@@ -75,8 +78,9 @@ public class GameManager : MonoBehaviour {
         {
             currTime2 = 0;
             doomsDaySlider.value += 1;
-            info.text = "World ends in " + (doomsDaySlider.maxValue - doomsDaySlider.value) + " years";
+            info.text = "No polar bear in " + (doomsDaySlider.maxValue - doomsDaySlider.value) + " years";
             water.localScale = Vector3.one + new Vector3(1, 1, 1) * ((doomsDaySlider.value - doomsDaySlider.minValue) * 0.20f / (doomsDaySlider.maxValue - doomsDaySlider.minValue));
+            flood.localPosition += new Vector3(0,0.005f,0) * ((doomsDaySlider.value - doomsDaySlider.minValue) * 2.80f / (doomsDaySlider.maxValue - doomsDaySlider.minValue));
         }
 
 
@@ -138,7 +142,7 @@ public class GameManager : MonoBehaviour {
     {
         if (doomsDaySlider.maxValue + value > doomsDaySlider.value)
             doomsDaySlider.maxValue += value;
-        info.text = "World ends in " + (doomsDaySlider.maxValue - doomsDaySlider.value) + " years";
+        info.text = "No polar bear in " + (doomsDaySlider.maxValue - doomsDaySlider.value) + " years";
         water.localScale = Vector3.one + new Vector3(1, 1, 1) * ((doomsDaySlider.value - doomsDaySlider.minValue) * 0.20f / (doomsDaySlider.maxValue - doomsDaySlider.minValue));
     }
 
