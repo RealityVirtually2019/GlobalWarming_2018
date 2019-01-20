@@ -23,6 +23,11 @@ using UnityEngine.UI;
 /// </summary>
 public class OVRScreenFade : MonoBehaviour
 {
+
+    public AudioClip[] adClips;
+    public AudioClip endClip;
+    public AudioSource adSource;
+
     [Tooltip("Fade duration")]
 	public float fadeTime = 2.0f;
 
@@ -125,11 +130,46 @@ public class OVRScreenFade : MonoBehaviour
     {
         if (fadeOnStart)
         {
-            StartCoroutine(Fade(1,0));
+            currentAlpha = 1f;
+            SetMaterialAlpha();
+            StartCoroutine(playAudioSequentially());
+
+            //StartCoroutine(Fade(1,0));
+
         }
     }
 
-	void OnEnable()
+    IEnumerator playAudioSequentially()
+    {
+        float elapsedTime = 0.0f;
+        while (elapsedTime < 0.5f)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        //1.Loop through each AudioClip
+        for (int i = 0; i < adClips.Length; i++)
+        {
+            //2.Assign current AudioClip to audiosource
+            adSource.clip = adClips[i];
+
+            //3.Play Audio
+            adSource.Play();
+
+            //4.Wait for it to finish playing
+            while (adSource.isPlaying)
+            {
+                yield return null;
+            }
+
+            //5. Go back to #2 and play the next audio in the adClips array
+        }
+        StartCoroutine(Fade(1, 0));
+        yield return null;
+
+    }
+
+    void OnEnable()
 	{
 		if (!fadeOnStart)
 		{
@@ -176,7 +216,8 @@ public class OVRScreenFade : MonoBehaviour
 	IEnumerator Fade(float startAlpha, float endAlpha)
 	{
 		float elapsedTime = 0.0f;
-		while (elapsedTime < fadeTime)
+        //StartCoroutine(playAudioSequentially());
+        while (elapsedTime < fadeTime)
 		{
 			elapsedTime += Time.deltaTime;
             currentAlpha = Mathf.Lerp(startAlpha, endAlpha, Mathf.Clamp01(elapsedTime / fadeTime));
