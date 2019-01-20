@@ -6,13 +6,15 @@ public class takeEarth : MonoBehaviour {
     public GameObject earthUI;
     protected GameManager MyGameManager = null;
     private bool hasEarth = false;
+    private AudioSource audioSource;
     // Use this for initialization
     void Start () {
         MyGameManager = GameManager.Instance;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
@@ -20,6 +22,7 @@ public class takeEarth : MonoBehaviour {
     {
         if (other.tag == "hands" && !hasEarth)
         {
+            audioSource.Play();
             gameObject.SetActive(false);
             MyGameManager.pickedEarth(true);
             MyGameManager.startUI(true);

@@ -7,6 +7,13 @@ TagManager:
   - hands
   - nr
   - penguin
+  - thermostat
+  - car
+  - tvstereo
+  - phonecomputer
+  - sink
+  - reusablebottle
+  - localfood
   layers:
   - Default
   - TransparentFX
