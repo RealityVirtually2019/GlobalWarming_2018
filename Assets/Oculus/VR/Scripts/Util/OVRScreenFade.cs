@@ -16,6 +16,7 @@ permissions and limitations under the License.
 
 using UnityEngine;
 using System.Collections; // required for Coroutines
+using UnityEngine.UI;
 
 /// <summary>
 /// Fades the screen from black after a new scene is loaded. Fade can also be controlled mid-scene using SetUIFade and SetFadeLevel
@@ -29,11 +30,11 @@ public class OVRScreenFade : MonoBehaviour
 	public Color fadeColor = new Color(0.01f, 0.01f, 0.01f, 1.0f);
 
     public bool fadeOnStart = true;
-
-	/// <summary>
-	/// The render queue used by the fade mesh. Reduce this if you need to render on top of it.
-	/// </summary>
-	public int renderQueue = 5000;
+    public bool isFadingDone = false;
+    /// <summary>
+    /// The render queue used by the fade mesh. Reduce this if you need to render on top of it.
+    /// </summary>
+    public int renderQueue = 5000;
 
     private float uiFadeAlpha = 0;
 
@@ -41,7 +42,7 @@ public class OVRScreenFade : MonoBehaviour
 	private MeshFilter fadeMesh;
 	private Material fadeMaterial = null;
     private bool isFading = false;
-
+    
     public float currentAlpha { get; private set; }
 
 	void Awake()
@@ -182,6 +183,8 @@ public class OVRScreenFade : MonoBehaviour
             SetMaterialAlpha();
 			yield return new WaitForEndOfFrame();
 		}
+        isFadingDone = true;
+
 	}
 
     /// <summary>
